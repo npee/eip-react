@@ -11,6 +11,8 @@ import Typography from "@material-ui/core/Typography";
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+class Quiz { quizId; year; nth; question; isCorrect; createdDate; modifiedDate; }
+
 class QuizListComponent extends Component {
 
     constructor(props) {
@@ -18,20 +20,38 @@ class QuizListComponent extends Component {
 
         this.state = {
             quizzes:[],
+            message: null,
         }
     }
 
     componentDidMount() {
-        this.reloadUserList();
+        this.reloadQuizList();
     }
-    reloadUserList = () => {
+
+    reloadQuizList = () => {
         ApiService.fetchQuizzes().then( res => {
             this.setState({
                 quizzes: res.data.list,
             })
         }).catch( err => {
             console.log('reloadedQuizzesList() Error!', err);
-        })
+        });
+    }
+
+    deleteQuiz = (id) => {
+        ApiService.deleteQuiz(id).then( res => {
+            this.setState({
+                // eslint-disable-next-line array-callback-return
+                quizzes: this.state.quizzes.filter( quiz => {
+                    // eslint-disable-next-line no-unused-expressions
+                    return quiz.quizId !== id;
+                }),
+                message: '퀴즈가 삭제되었습니다.',
+            });
+            alert(this.state.message);
+        }).catch( err => {
+            console.log('deleterQuiz() Error!', err);
+        });
     }
 
     render() {
@@ -62,6 +82,9 @@ class QuizListComponent extends Component {
                                 <TableCell align="center">{quiz.isCorrect}</TableCell>
                                 <TableCell align="center">{quiz.createdDate}</TableCell>
                                 <TableCell align="center">{quiz.modifiedDate}</TableCell>
+                                <TableCell align="center" onClick={() => this.deleteQuiz(quiz.quizId)}>
+                                    <DeleteIcon />
+                                </TableCell>
                             </TableRow>
                         )}
                     </TableBody>
