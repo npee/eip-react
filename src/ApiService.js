@@ -9,7 +9,11 @@ class ApiService {
     }
 
     deleteQuiz(quizId) {
-        return axios.delete(API_BASE_URL + '/quizzes/' + quizId)
+        return axios.delete(API_BASE_URL + '/quizzes/' + quizId);
+    }
+
+    addQuiz(quiz) {
+        return axios.post(API_BASE_URL + '/quizzes', quiz);
     }
 
 }
