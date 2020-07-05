@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import QuizListComponent from "../quiz/QuizListComponent";
+import AddQuizComponent from "../quiz/AddQuizComponent";
 
 const AppRouter = () => {
     return (
@@ -10,6 +11,7 @@ const AppRouter = () => {
                     <Switch>
                         <Route exact path="/" component={QuizListComponent} />
                         <Route path="/quizzes" component={QuizListComponent} />
+                        <Route path="/add-quiz" component={AddQuizComponent}/>
                     </Switch>
                 </div>
             </BrowserRouter>
