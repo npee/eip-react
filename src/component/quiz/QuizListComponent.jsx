@@ -11,7 +11,9 @@ import Typography from "@material-ui/core/Typography";
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-class Quiz { quizId; year; nth; question; isCorrect; createdDate; modifiedDate; }
+// eslint-disable-next-line no-unused-vars
+class Quiz { quizId; year; nth; question; image; isCorrect; createdDate; modifiedDate; }
+console.log(Quiz);
 
 class QuizListComponent extends Component {
 
@@ -38,8 +40,14 @@ class QuizListComponent extends Component {
         });
     }
 
+    addQuiz = () => {
+        window.localStorage.removeItem('quizId');
+        this.props.history.push('/add-quiz');
+    }
+
     deleteQuiz = (id) => {
         ApiService.deleteQuiz(id).then( res => {
+            console.log(res.data.list);
             this.setState({
                 // eslint-disable-next-line array-callback-return
                 quizzes: this.state.quizzes.filter( quiz => {
@@ -58,6 +66,7 @@ class QuizListComponent extends Component {
         return (
             <div>
                 <Typography variant="h4" style={ style }>List</Typography>
+                <Button variant="contained" color="primary" onClick={this.addQuiz}>퀴즈 등록</Button>
                 <Table>
                     <TableHead>
                         <TableRow>
