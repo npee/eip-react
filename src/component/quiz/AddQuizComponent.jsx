@@ -29,6 +29,10 @@ class AddQuizComponent extends Component {
         });
     }
 
+    home = (e) => {
+        this.props.history.push('/');
+    }
+
     saveQuiz = (e) => {
         e.preventDefault();
 
@@ -60,6 +64,7 @@ class AddQuizComponent extends Component {
         return (
             <div>
                 <Typography variant="h4" style={style}>퀴즈 등록</Typography>
+                <Button variant="contained" color="primary" onClick={this.home}>초기 화면으로</Button>
                 <form style={formContainer}>
                     <TextField type="text" name="year" placeholder="연도를 입력해주세요"
                                fullWidth margin="normal" value={this.state.year} onChange={this.onChange} />
