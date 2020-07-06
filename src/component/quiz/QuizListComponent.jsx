@@ -43,6 +43,13 @@ class QuizListComponent extends Component {
     addQuiz = () => {
         window.localStorage.removeItem('quizId');
         this.props.history.push('/add-quiz');
+        console.log(this.props);
+    }
+
+    editQuiz = (id) => {
+        window.localStorage.setItem('quizId', id);
+        this.props.history.push('/edit-quiz');
+        console.log(this.props);
     }
 
     deleteQuiz = (id) => {
@@ -93,6 +100,9 @@ class QuizListComponent extends Component {
                                 <TableCell align="center">{quiz.modifiedDate}</TableCell>
                                 <TableCell align="center" onClick={() => this.deleteQuiz(quiz.quizId)}>
                                     <DeleteIcon />
+                                </TableCell>
+                                <TableCell align="center" onClick={() => this.editQuiz(quiz.quizId)}>
+                                    <CreateIcon />
                                 </TableCell>
                             </TableRow>
                         )}
