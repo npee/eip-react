@@ -8,12 +8,20 @@ class ApiService {
         return axios.get(API_BASE_URL + '/quizzes');
     }
 
+    fetchQuizById(quizId) {
+        return axios.get(API_BASE_URL + '/quizzes/' + quizId);
+    }
+
     deleteQuiz(quizId) {
         return axios.delete(API_BASE_URL + '/quizzes/' + quizId);
     }
 
     addQuiz(quiz) {
         return axios.post(API_BASE_URL + '/quizzes', quiz);
+    }
+
+    editQuiz(quiz) {
+        return axios.put(API_BASE_URL + '/quizzes/' + quiz.quizId, quiz)
     }
 
 }
