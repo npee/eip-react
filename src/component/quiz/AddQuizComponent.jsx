@@ -13,7 +13,7 @@ import Container from "@material-ui/core/Container";
 import FormGroup from "@material-ui/core/FormGroup";
 
 // eslint-disable-next-line no-unused-vars
-class Quiz { quizId; year; nth; question; image; isCorrect; createdDate; modifiedDate; }
+class Quiz { quizId; year; nth; subjectId; question; image; isCorrect; createdDate; modifiedDate; }
 console.log(Quiz);
 
 const useStyles = () => ({
@@ -38,6 +38,7 @@ class AddQuizComponent extends Component {
         this.state = {
             year: 2020,
             nth: '1st',
+            subjectId: 1,
             question: '',
             image: '',
             isCorrect: 'false'
@@ -46,6 +47,7 @@ class AddQuizComponent extends Component {
 
     handleChange = (e) => {
         this.setState({[e.target.name]: e.target.value});
+        console.log(this.state);
     }
 
     home = () => {
@@ -58,6 +60,7 @@ class AddQuizComponent extends Component {
         let quiz = {
             year: this.state.year,
             nth: this.state.nth,
+            subjectId: this.state.subjectId,
             question: this.state.question,
             image: this.state.image,
             isCorrect: this.state.isCorrect
@@ -94,6 +97,13 @@ class AddQuizComponent extends Component {
             return yearList;
         }
 
+        const subjects = () => {
+            let subjectList = [];
+            for (let s = 1; s <= 5; s++) {
+                subjectList.push(s);
+            }
+            return subjectList;
+        }
 
         const classes = useStyles();
 
@@ -110,12 +120,20 @@ class AddQuizComponent extends Component {
                         <InputLabel id="nth-list">회차</InputLabel>
                         <Select labelId="nth-list" name="nth" value={this.state.nth} onChange={this.handleChange}>{this.setItems(nths)}</Select>
                     </FormControl>
+                    <FormControl style={classes.select}>
+                        <InputLabel id="subject-list">과목 번호</InputLabel>
+                        <Select labelId="subject-list" name="subjectId" value={this.state.subjectId} onChange={this.handleChange}>{this.setItems(subjects())}</Select>
+                    </FormControl>
                 </FormGroup>
                 <FormGroup>
                     <TextField required label="문제" type="text" name="question" placeholder="문제를 입력해주세요"
                                fullWidth margin="normal" style={classes.textField} value={this.state.question} onChange={this.handleChange} />
                     <TextField label="이미지" type="text" name="image" placeholder="이미지가 있으면 등록해주세요"
                                fullWidth margin="normal" style={classes.textField} value={this.state.image} onChange={this.handleChange} />
+                </FormGroup>
+                <FormGroup>
+                    {/*보기*/}
+                    {/*정답 여부는 radio button으로*/}
                     <TextField label="정답 여부" type="text" name="isCorrect" placeholder="true or false"
                                fullWidth margin="normal" style={classes.textField} value={this.state.isCorrect} onChange={this.handleChange} />
                 </FormGroup>
