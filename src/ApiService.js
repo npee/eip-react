@@ -24,6 +24,10 @@ class ApiService {
         return axios.put(API_BASE_URL + '/quizzes/' + quiz.quizId, quiz)
     }
 
+    fetchSubjects() {
+        return axios.get(API_BASE_URL + '/subjects');
+    }
+
 }
 
 export default new ApiService();

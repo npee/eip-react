@@ -45,6 +45,22 @@ class AddQuizComponent extends Component {
         };
     }
 
+    componentDidMount() {
+        this.reloadSubjectList();
+    }
+
+    reloadSubjectList = () => {
+        ApiService.fetchSubjects().then( res => {
+            this.setState({
+                subjects: res.data.list,
+            });
+            console.log(res.data.list);
+        }).catch( err => {
+            console.log('reloadSubjectList() Error!', err);
+        });
+    }
+
+
     handleChange = (e) => {
         this.setState({[e.target.name]: e.target.value});
         console.log(this.state);
