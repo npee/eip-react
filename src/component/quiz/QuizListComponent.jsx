@@ -10,10 +10,18 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { withStyles } from '@material-ui/core/styles';
 
 // eslint-disable-next-line no-unused-vars
 // class Quiz { quizId; year; nth; subjectId; question; image; isCorrect; createdDate; modifiedDate; }
 // class Subject { subjectId; subject; subject2019; }
+
+const useStyles = () => ({
+    typoGraphy: {
+        display: 'flex',
+        justifyContent: 'center'
+    }
+});
 
 class QuizListComponent extends Component {
 
@@ -91,9 +99,12 @@ class QuizListComponent extends Component {
     }
 
     render() {
+
+        const classes = useStyles();
+
         return (
             <div>
-                <Typography variant="h4" style={ style }>List</Typography>
+                <Typography variant="h4" style={ classes.typoGraphy }>List</Typography>
                 <Button variant="contained" color="primary" onClick={this.addQuiz}>퀴즈 등록</Button>
                 <Table>
                     <TableHead>
@@ -136,10 +147,4 @@ class QuizListComponent extends Component {
     }
 }
 
-// TODO: withSytles로 변경
-const style = {
-    display: 'flex',
-    justifyContent: 'center',
-}
-
-export default QuizListComponent;
+export default withStyles(useStyles)(QuizListComponent);
