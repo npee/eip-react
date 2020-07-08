@@ -44,6 +44,7 @@ class EditQuizComponent extends Component {
 
     componentDidMount() {
         this.loadUser();
+        this.reloadSubjectList();
     }
 
     loadUser = () => {
@@ -64,7 +65,17 @@ class EditQuizComponent extends Component {
         })
     }
 
-    onChange = (e) => {
+    reloadSubjectList = () => {
+        ApiService.fetchSubjects().then( res => {
+            this.setState({
+                subjects: res.data.list,
+            });
+        }).catch( err => {
+            console.log('reloadSubjectList() Error!', err);
+        });
+    }
+
+    handleChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
         });
@@ -99,11 +110,44 @@ class EditQuizComponent extends Component {
         });
     }
 
-    // TODO: year, nth는 드롭다운으로 변경 예정
+    setItems = (items) => {
+        return items.map( (item, index) =>
+            <MenuItem key={index} value={item}>{item}</MenuItem>
+        )
+    }
+
+    setItemsForSubject = (items) => {
+        return items.map( (item, index) =>
+            <MenuItem key={index} value={index+1}>{item}</MenuItem>
+        )
+    }
+
     // TODO: image는 파일 업로드로 대체 해야함
     // TODO: isCorrect는 radio button으로 대체 예정
     // TODO: 선택지(보기) 넣어야 함
     render() {
+
+        const nths = ['1st', '2nd', '3rd', '1st+2nd'];
+        const years = () => {
+            let yearList = [];
+            for (let y = 2020; y > 2000; y--) {
+                yearList.push(y);
+            }
+            return yearList;
+        }
+
+        const subjects = () => {
+            let subjectList = [];
+            for (let i in this.state.subjects) {
+                if (this.state.subjects.hasOwnProperty(i)) {
+                    if (this.state.year < 2020)
+                        subjectList.push(this.state.subjects[i]['subject2019']);
+                    else
+                        subjectList.push(this.state.subjects[i]['subject']);
+                }
+            }
+            return subjectList;
+        }
 
         const classes = useStyles();
 
@@ -112,18 +156,32 @@ class EditQuizComponent extends Component {
                 <Typography variant="h4" style={ classes.typoGraphy }>퀴즈 수정</Typography>
                 <Button variant="contained" color="primary" onClick={this.home}>초기 화면으로</Button>
                 <FormGroup row>
-                    <TextField type="text" name="year" placeholder="연도를 입력해주세요"
-                               fullWidth margin="normal" value={this.state.year} onChange={this.onChange} />
-                    <TextField type="text" name="nth" placeholder="회차를 입력해주세요"
-                               fullWidth margin="normal" value={this.state.nth} onChange={this.onChange} />
-                    <TextField type="text" name="question" placeholder="문제를 입력해주세요"
-                               fullWidth margin="normal" value={this.state.question} onChange={this.onChange} />
-                    <TextField type="text" name="image" placeholder="이미지가 있으면 등록해주세요"
-                               fullWidth margin="normal" value={this.state.image} onChange={this.onChange} />
-                    <TextField type="text" name="isCorrect" placeholder="true or false"
-                               fullWidth margin="normal" value={this.state.isCorrect} onChange={this.onChange} />
-                    <Button variant="contained" color="primary" onClick={this.saveQuiz}>수정</Button>
+                    <FormControl style={classes.select}>
+                        <InputLabel id="year-list">연도</InputLabel>
+                        <Select labelId="year-lists" name="year" value={this.state.year} onChange={this.handleChange}>{this.setItems(years())}</Select>
+                    </FormControl>
+                    <FormControl style={classes.select}>
+                        <InputLabel id="nth-list">회차</InputLabel>
+                        <Select labelId="nth-list" name="nth" value={this.state.nth} onChange={this.handleChange}>{this.setItems(nths)}</Select>
+                    </FormControl>
+                    <FormControl style={classes.select}>
+                        <InputLabel id="subject-list">과목명</InputLabel>
+                        <Select labelId="subject-list" name="subjectId" value={this.state.subjectId} onChange={this.handleChange}>{this.setItemsForSubject(subjects())}</Select>
+                    </FormControl>
                 </FormGroup>
+                <FormGroup>
+                    <TextField required label="문제" type="text" name="question" placeholder="문제를 입력해주세요"
+                               fullWidth margin="normal" style={classes.textField} value={this.state.question} onChange={this.handleChange} />
+                    <TextField label="이미지" type="text" name="image" placeholder="이미지가 있으면 등록해주세요"
+                               fullWidth margin="normal" style={classes.textField} value={this.state.image} onChange={this.handleChange} />
+                </FormGroup>
+                <FormGroup>
+                    {/*보기*/}
+                    {/*정답 여부는 radio button으로*/}
+                    <TextField label="정답 여부" type="text" name="isCorrect" placeholder="true or false"
+                               fullWidth margin="normal" style={classes.textField} value={this.state.isCorrect} onChange={this.handleChange} />
+                </FormGroup>
+                <Button variant="contained" color="primary" onClick={this.saveQuiz}>수정</Button>
             </Container>
         );
     }
