@@ -14,7 +14,9 @@ import FormGroup from "@material-ui/core/FormGroup";
 
 // eslint-disable-next-line no-unused-vars
 class Quiz { quizId; year; nth; subjectId; question; image; isCorrect; createdDate; modifiedDate; }
+class Subject { subjectId; subject; subject2019; }
 console.log(Quiz);
+console.log(Subject);
 
 const useStyles = () => ({
     typoGraphy: {
@@ -54,7 +56,6 @@ class AddQuizComponent extends Component {
             this.setState({
                 subjects: res.data.list,
             });
-            console.log(res.data.list);
         }).catch( err => {
             console.log('reloadSubjectList() Error!', err);
         });
@@ -100,6 +101,12 @@ class AddQuizComponent extends Component {
         )
     }
 
+    setItemsForSubject = (items) => {
+        return items.map( (item, index) =>
+            <MenuItem key={index} value={index+1}>{item}</MenuItem>
+        )
+    }
+
     // TODO: image는 파일 업로드로 대체 해야함
     // TODO: isCorrect는 radio button으로 대체 예정
     // TODO: 선택지(보기) 넣어야 함
@@ -115,8 +122,13 @@ class AddQuizComponent extends Component {
 
         const subjects = () => {
             let subjectList = [];
-            for (let s = 1; s <= 5; s++) {
-                subjectList.push(s);
+            for (let i in this.state.subjects) {
+                if (this.state.subjects.hasOwnProperty(i)) {
+                    if (this.state.year < 2020)
+                        subjectList.push(this.state.subjects[i]['subject2019']);
+                    else
+                        subjectList.push(this.state.subjects[i]['subject']);
+                }
             }
             return subjectList;
         }
@@ -137,8 +149,8 @@ class AddQuizComponent extends Component {
                         <Select labelId="nth-list" name="nth" value={this.state.nth} onChange={this.handleChange}>{this.setItems(nths)}</Select>
                     </FormControl>
                     <FormControl style={classes.select}>
-                        <InputLabel id="subject-list">과목 번호</InputLabel>
-                        <Select labelId="subject-list" name="subjectId" value={this.state.subjectId} onChange={this.handleChange}>{this.setItems(subjects())}</Select>
+                        <InputLabel id="subject-list">과목명</InputLabel>
+                        <Select labelId="subject-list" name="subjectId" value={this.state.subjectId} onChange={this.handleChange}>{this.setItemsForSubject(subjects())}</Select>
                     </FormControl>
                 </FormGroup>
                 <FormGroup>
