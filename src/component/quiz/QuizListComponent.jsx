@@ -72,8 +72,9 @@ class QuizListComponent extends Component {
     }
 
     deleteQuiz = (id) => {
+        // eslint-disable-next-line no-restricted-globals
+        confirm("퀴즈를 삭제하시겠습니까?") ?
         ApiService.deleteQuiz(id).then( res => {
-            console.log(res.data.list);
             this.setState({
                 // eslint-disable-next-line array-callback-return
                 quizzes: this.state.quizzes.filter( quiz => {
@@ -85,7 +86,7 @@ class QuizListComponent extends Component {
             alert(this.state.message);
         }).catch( err => {
             console.log('deleterQuiz() Error!', err);
-        });
+        }) : console.log("삭제 취소");
     }
 
     findSubjectByIdAndYear = (subjectId, year) => {
