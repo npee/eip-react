@@ -40,7 +40,10 @@ class AddQuizComponent extends Component {
         this.state = {
             year: 2020,
             nth: '1st',
-            subjectId: 1,
+            // 초기값에 공백 이외의 값을 주는 경우 경고메시지가 뜨고 있으므로
+            // 임시로 공백값을 주는 중
+            // subjectId: 1,
+            subjectId: '',
             question: '',
             image: '',
             isCorrect: 'false'

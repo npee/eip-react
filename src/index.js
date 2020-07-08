@@ -5,9 +5,12 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-  <React.StrictMode>
+    // material-ui의 Select, ItemMenu를 사용하는 경우 findDOMNode에 대한 오류가 뜨므로
+    // 임시로 StrictMode 해제
+    // <React.StrictMode>
     <App />
-  </React.StrictMode>,
+    // </React.StrictMode>,
+    ,
   document.getElementById('root')
 );
 
