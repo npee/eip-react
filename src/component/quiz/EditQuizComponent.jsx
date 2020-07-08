@@ -4,6 +4,27 @@ import ApiService from "../../ApiService";
 import TextField from "@material-ui/core/TextField";
 import Button from '@material-ui/core/Button';
 import Typography from "@material-ui/core/Typography";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import { withStyles } from '@material-ui/core/styles';
+import Container from "@material-ui/core/Container";
+import FormGroup from "@material-ui/core/FormGroup";
+
+const useStyles = () => ({
+    typoGraphy: {
+        display: 'flex',
+        justifyContent: 'center'
+    },
+    select: {
+        margin: 6,
+        minWidth: 120
+    },
+    textField: {
+        margin: 6,
+    }
+});
 
 class EditQuizComponent extends Component {
 
@@ -14,6 +35,7 @@ class EditQuizComponent extends Component {
             quizId: '',
             year: '',
             nth: '',
+            subjectId: '',
             question: '',
             image: '',
             isCorrect: ''
@@ -32,6 +54,7 @@ class EditQuizComponent extends Component {
                 quizId: quiz.quizId,
                 year: quiz.year,
                 nth: quiz.nth,
+                subjectId: quiz.subjectId,
                 question: quiz.question,
                 image: quiz.image,
                 isCorrect: quiz.isCorrect
@@ -58,6 +81,7 @@ class EditQuizComponent extends Component {
             quizId: this.state.quizId,
             year: this.state.year,
             nth: this.state.nth,
+            subjectId: this.state.subjectId,
             question: this.state.question,
             image: this.state.image,
             isCorrect: this.state.isCorrect
@@ -80,11 +104,14 @@ class EditQuizComponent extends Component {
     // TODO: isCorrect는 radio button으로 대체 예정
     // TODO: 선택지(보기) 넣어야 함
     render() {
+
+        const classes = useStyles();
+
         return (
-            <div>
-                <Typography variant="h4" style={style}>퀴즈 수정</Typography>
+            <Container maxWidth="sm">
+                <Typography variant="h4" style={ classes.typoGraphy }>퀴즈 수정</Typography>
                 <Button variant="contained" color="primary" onClick={this.home}>초기 화면으로</Button>
-                <form style={formContainer}>
+                <FormGroup row>
                     <TextField type="text" name="year" placeholder="연도를 입력해주세요"
                                fullWidth margin="normal" value={this.state.year} onChange={this.onChange} />
                     <TextField type="text" name="nth" placeholder="회차를 입력해주세요"
@@ -96,20 +123,10 @@ class EditQuizComponent extends Component {
                     <TextField type="text" name="isCorrect" placeholder="true or false"
                                fullWidth margin="normal" value={this.state.isCorrect} onChange={this.onChange} />
                     <Button variant="contained" color="primary" onClick={this.saveQuiz}>수정</Button>
-                </form>
-            </div>
+                </FormGroup>
+            </Container>
         );
     }
 }
 
-const formContainer = {
-    display: 'flex',
-    flexFlow: 'row wrap'
-}
-
-const style = {
-    display: 'flex',
-    justifyContent: 'center'
-}
-
-export default EditQuizComponent;
+export default withStyles(useStyles)(EditQuizComponent);
