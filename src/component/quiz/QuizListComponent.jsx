@@ -12,8 +12,8 @@ import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 // eslint-disable-next-line no-unused-vars
-class Quiz { quizId; year; nth; question; image; isCorrect; createdDate; modifiedDate; }
-console.log(Quiz);
+// class Quiz { quizId; year; nth; subjectId; question; image; isCorrect; createdDate; modifiedDate; }
+// class Subject { subjectId; subject; subject2019; }
 
 class QuizListComponent extends Component {
 
@@ -28,6 +28,7 @@ class QuizListComponent extends Component {
 
     componentDidMount() {
         this.reloadQuizList();
+        this.reloadSubjectList();
     }
 
     reloadQuizList = () => {
@@ -37,6 +38,16 @@ class QuizListComponent extends Component {
             })
         }).catch( err => {
             console.log('reloadedQuizzesList() Error!', err);
+        });
+    }
+
+    reloadSubjectList = () => {
+        ApiService.fetchSubjects().then( res => {
+            this.setState({
+                subjects: res.data.list,
+            });
+        }).catch( err => {
+            console.log('reloadSubjectList() Error!', err);
         });
     }
 
@@ -69,6 +80,16 @@ class QuizListComponent extends Component {
         });
     }
 
+    findSubjectByIdAndYear = (subjectId, year) => {
+        const subjects = this.state.subjects;
+
+        for (let i in subjects) {
+            if (subjects.hasOwnProperty(i) && subjectId === parseInt(i) + 1) {
+                return year < 2020 ? subjects[i]['subject2019'] : subjects[i]['subject'];
+            }
+        }
+    }
+
     render() {
         return (
             <div>
@@ -80,6 +101,7 @@ class QuizListComponent extends Component {
                             <TableCell align="center">ID</TableCell>
                             <TableCell align="center">Year</TableCell>
                             <TableCell align="center">nth</TableCell>
+                            <TableCell align="center">subject</TableCell>
                             <TableCell align="inherit">Question</TableCell>
                             <TableCell align="inherit">ImageUrl</TableCell>
                             <TableCell align="center">isCorrect</TableCell>
@@ -93,6 +115,7 @@ class QuizListComponent extends Component {
                                 <TableCell component="th" scope="quiz" align="center">{quiz.quizId}</TableCell>
                                 <TableCell align="center">{quiz.year}</TableCell>
                                 <TableCell align="center">{quiz.nth}</TableCell>
+                                <TableCell align="center">{this.findSubjectByIdAndYear(quiz.subjectId, quiz.year)}</TableCell>
                                 <TableCell align="inherit">{quiz.question}</TableCell>
                                 <TableCell align="inherit">{quiz.image}</TableCell>
                                 <TableCell align="center">{quiz.isCorrect}</TableCell>
@@ -113,6 +136,7 @@ class QuizListComponent extends Component {
     }
 }
 
+// TODO: withSytles로 변경
 const style = {
     display: 'flex',
     justifyContent: 'center',
