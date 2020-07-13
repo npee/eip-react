@@ -11,6 +11,7 @@ import FormControl from "@material-ui/core/FormControl";
 import { withStyles } from '@material-ui/core/styles';
 import Container from "@material-ui/core/Container";
 import FormGroup from "@material-ui/core/FormGroup";
+import Radio from "@material-ui/core/Radio";
 
 // eslint-disable-next-line no-unused-vars
 class Quiz { quizId; year; nth; subjectId; question; image; isCorrect; createdDate; modifiedDate; }
@@ -29,6 +30,12 @@ const useStyles = () => ({
     },
     textField: {
         margin: 6,
+    },
+    itemField: {
+        minWidth: 500
+    },
+    selectedItem: {
+
     }
 });
 
@@ -50,19 +57,19 @@ class AddQuizComponent extends Component {
             items: [
                 {
                     choice: '',
-                    isAnswer: ''
+                    isAnswer: 'false'
                 },
                 {
                     choice: '',
-                    isAnswer: ''
+                    isAnswer: 'false'
                 },
                 {
                     choice: '',
-                    isAnswer: ''
+                    isAnswer: 'false'
                 },
                 {
                     choice: '',
-                    isAnswer: ''
+                    isAnswer: 'false'
                 },
             ]
         };
@@ -89,15 +96,18 @@ class AddQuizComponent extends Component {
     handleChangeItemList = (e) => {
         const items = [...this.state.items];
         const itemIndex = parseInt(e.target.name.slice(6)) - 1;
-        let item = items[itemIndex];
+        let item = items;
         if (e.target.name.includes('choice')) {
-            console.log('choice changed');
-            item.choice = e.target.value;
+            item[itemIndex].choice = e.target.value;
         } else {
-            console.log('answer changed');
-            item.isAnswer = e.target.value;
+            for (let i in item) {
+                item[i].isAnswer = 'false';
+            }
+            item[itemIndex].isAnswer = 'true';
         }
-        items[itemIndex] = item;
+        for (let i in items) {
+            items[i] = item[i];
+        }
         this.setState({items: items});
 
         console.log(this.state);
@@ -143,9 +153,41 @@ class AddQuizComponent extends Component {
         )
     }
 
+    /**
+     * 보기 리스트 Input
+     * @param items : any[]
+     * @returns {*}
+     */
+    setItem = (items) => {
+        const classes = useStyles();
+        const labels = ["보기1", "보기2", "보기3", "보기4"];
+        const choices = ["choice1", "choice2", "choice3", "choice4"];
+        const answers = ["answer1", "answer2", "answer3", "answer4"];
+        return items.map( (item, index) =>
+            <FormGroup row key={index}>
+                <Radio
+                    checked={items[index].isAnswer === 'true'}
+                    onChange={this.handleChangeItemList}
+                    value={items[index].isAnswer}
+                    name={answers[index]}
+                    inputProps={{ 'aria-label': labels[index] }}
+                />
+                <TextField
+                    label={labels[index]}
+                    type="text"
+                    name={choices[index]}
+                    placeholder={labels[index]}
+                    variant="outlined"
+                    margin="normal"
+                    style={classes.itemField}
+                    value={items[index].choice}
+                    onChange={this.handleChangeItemList}
+                />
+            </FormGroup>
+        )
+    }
+
     // TODO: image는 파일 업로드로 대체 해야함
-    // TODO: isCorrect는 radio button으로 대체 예정
-    // TODO: 선택지(보기) 넣어야 함
     render() {
         const nths = ['1st', '2nd', '3rd', '1st+2nd'];
         const years = () => {
@@ -195,18 +237,7 @@ class AddQuizComponent extends Component {
                     <TextField label="이미지" type="text" name="image" placeholder="이미지가 있으면 등록해주세요"
                                fullWidth margin="normal" style={classes.textField} value={this.state.image} onChange={this.handleChange} />
                 </FormGroup>
-                <FormGroup>
-                    {/*보기*/}
-                    {/*정답 여부는 radio button으로*/}
-                    <TextField label="보기1" type="text" name="choice1" placeholder="보기1"
-                               fullWidth margin="normal" style={classes.textField} value={this.state.items[0].choice} onChange={this.handleChangeItemList} />
-                    <TextField label="보기2" type="text" name="choice2" placeholder="보기2"
-                               fullWidth margin="normal" style={classes.textField} value={this.state.items[1].choice} onChange={this.handleChangeItemList} />
-                    <TextField label="보기3" type="text" name="choice3" placeholder="보기3"
-                               fullWidth margin="normal" style={classes.textField} value={this.state.items[2].choice} onChange={this.handleChangeItemList} />
-                    <TextField label="보기4" type="text" name="choice4" placeholder="보기4"
-                               fullWidth margin="normal" style={classes.textField} value={this.state.items[3].choice} onChange={this.handleChangeItemList} />
-                </FormGroup>
+                <FormGroup>{this.setItem(this.state.items)}</FormGroup>
                 <FormGroup>
                     <TextField label="정답 여부" type="text" name="isCorrect" placeholder="true or false"
                                fullWidth margin="normal" style={classes.textField} value={this.state.isCorrect} onChange={this.handleChange} />
