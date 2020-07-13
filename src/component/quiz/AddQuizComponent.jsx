@@ -98,15 +98,15 @@ class AddQuizComponent extends Component {
         });
     }
 
-    setItems = (items) => {
-        return items.map( (item, index) =>
-            <MenuItem key={index} value={item}>{item}</MenuItem>
+    setOption = (options) => {
+        return options.map( (option, index) =>
+            <MenuItem key={index} value={option}>{option}</MenuItem>
         )
     }
 
-    setItemsForSubject = (items) => {
-        return items.map( (item, index) =>
-            <MenuItem key={index} value={index+1}>{item}</MenuItem>
+    setSubject = (subjects) => {
+        return subjects.map( (subject, index) =>
+            <MenuItem key={index} value={index+1}>{subject}</MenuItem>
         )
     }
 
@@ -138,6 +138,8 @@ class AddQuizComponent extends Component {
 
         const classes = useStyles();
 
+        console.log(this.state);
+
         return (
             <Container maxWidth="sm">
                 <Typography variant="h4" style={classes.typoGraphy}>퀴즈 등록</Typography>
@@ -145,15 +147,15 @@ class AddQuizComponent extends Component {
                 <FormGroup row>
                     <FormControl style={classes.select}>
                         <InputLabel id="year-list">연도</InputLabel>
-                        <Select labelId="year-lists" name="year" value={this.state.year} onChange={this.handleChange}>{this.setItems(years())}</Select>
+                        <Select labelId="year-lists" name="year" value={this.state.year} onChange={this.handleChange}>{this.setOption(years())}</Select>
                     </FormControl>
                     <FormControl style={classes.select}>
                         <InputLabel id="nth-list">회차</InputLabel>
-                        <Select labelId="nth-list" name="nth" value={this.state.nth} onChange={this.handleChange}>{this.setItems(nths)}</Select>
+                        <Select labelId="nth-list" name="nth" value={this.state.nth} onChange={this.handleChange}>{this.setOption(nths)}</Select>
                     </FormControl>
                     <FormControl style={classes.select}>
                         <InputLabel id="subject-list">과목명</InputLabel>
-                        <Select labelId="subject-list" name="subjectId" value={this.state.subjectId} onChange={this.handleChange}>{this.setItemsForSubject(subjects())}</Select>
+                        <Select labelId="subject-list" name="subjectId" value={this.state.subjectId} onChange={this.handleChange}>{this.setSubject(subjects())}</Select>
                     </FormControl>
                 </FormGroup>
                 <FormGroup>
@@ -162,9 +164,19 @@ class AddQuizComponent extends Component {
                     <TextField label="이미지" type="text" name="image" placeholder="이미지가 있으면 등록해주세요"
                                fullWidth margin="normal" style={classes.textField} value={this.state.image} onChange={this.handleChange} />
                 </FormGroup>
+                {/*<FormGroup>*/}
+                {/*    /!*보기*!/*/}
+                {/*    /!*정답 여부는 radio button으로*!/*/}
+                {/*    <TextField label="보기1" type="text" name="isAnswer" placeholder="보기1"*/}
+                {/*               fullWidth margin="normal" style={classes.textField} value={this.state.items[0].isAnswer} onChange={this.handleChange} />*/}
+                {/*    <TextField label="보기2" type="text" name="isAnswer" placeholder="보기2"*/}
+                {/*               fullWidth margin="normal" style={classes.textField} value={this.state.items[1].isAnswer} onChange={this.handleChange} />*/}
+                {/*    <TextField label="보기3" type="text" name="isAnswer" placeholder="보기3"*/}
+                {/*               fullWidth margin="normal" style={classes.textField} value={this.state.items[2].isAnswer} onChange={this.handleChange} />*/}
+                {/*    <TextField label="보기4" type="text" name="isAnswer" placeholder="보기4"*/}
+                {/*               fullWidth margin="normal" style={classes.textField} value={this.state.items[3].isAnswer} onChange={this.handleChange} />*/}
+                {/*</FormGroup>*/}
                 <FormGroup>
-                    {/*보기*/}
-                    {/*정답 여부는 radio button으로*/}
                     <TextField label="정답 여부" type="text" name="isCorrect" placeholder="true or false"
                                fullWidth margin="normal" style={classes.textField} value={this.state.isCorrect} onChange={this.handleChange} />
                 </FormGroup>
