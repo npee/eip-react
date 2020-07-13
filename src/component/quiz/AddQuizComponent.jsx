@@ -46,7 +46,25 @@ class AddQuizComponent extends Component {
             subjectId: '',
             question: '',
             image: '',
-            isCorrect: 'false'
+            isCorrect: 'false',
+            items: [
+                {
+                    choice: '',
+                    isAnswer: ''
+                },
+                {
+                    choice: '',
+                    isAnswer: ''
+                },
+                {
+                    choice: '',
+                    isAnswer: ''
+                },
+                {
+                    choice: '',
+                    isAnswer: ''
+                },
+            ]
         };
     }
 
@@ -64,9 +82,24 @@ class AddQuizComponent extends Component {
         });
     }
 
-
     handleChange = (e) => {
         this.setState({[e.target.name]: e.target.value});
+    }
+
+    handleChangeItemList = (e) => {
+        const items = [...this.state.items];
+        const itemIndex = parseInt(e.target.name.slice(6)) - 1;
+        let item = items[itemIndex];
+        if (e.target.name.includes('choice')) {
+            console.log('choice changed');
+            item.choice = e.target.value;
+        } else {
+            console.log('answer changed');
+            item.isAnswer = e.target.value;
+        }
+        items[itemIndex] = item;
+        this.setState({items: items});
+
         console.log(this.state);
     }
 
@@ -138,8 +171,6 @@ class AddQuizComponent extends Component {
 
         const classes = useStyles();
 
-        console.log(this.state);
-
         return (
             <Container maxWidth="sm">
                 <Typography variant="h4" style={classes.typoGraphy}>퀴즈 등록</Typography>
@@ -164,18 +195,18 @@ class AddQuizComponent extends Component {
                     <TextField label="이미지" type="text" name="image" placeholder="이미지가 있으면 등록해주세요"
                                fullWidth margin="normal" style={classes.textField} value={this.state.image} onChange={this.handleChange} />
                 </FormGroup>
-                {/*<FormGroup>*/}
-                {/*    /!*보기*!/*/}
-                {/*    /!*정답 여부는 radio button으로*!/*/}
-                {/*    <TextField label="보기1" type="text" name="isAnswer" placeholder="보기1"*/}
-                {/*               fullWidth margin="normal" style={classes.textField} value={this.state.items[0].isAnswer} onChange={this.handleChange} />*/}
-                {/*    <TextField label="보기2" type="text" name="isAnswer" placeholder="보기2"*/}
-                {/*               fullWidth margin="normal" style={classes.textField} value={this.state.items[1].isAnswer} onChange={this.handleChange} />*/}
-                {/*    <TextField label="보기3" type="text" name="isAnswer" placeholder="보기3"*/}
-                {/*               fullWidth margin="normal" style={classes.textField} value={this.state.items[2].isAnswer} onChange={this.handleChange} />*/}
-                {/*    <TextField label="보기4" type="text" name="isAnswer" placeholder="보기4"*/}
-                {/*               fullWidth margin="normal" style={classes.textField} value={this.state.items[3].isAnswer} onChange={this.handleChange} />*/}
-                {/*</FormGroup>*/}
+                <FormGroup>
+                    {/*보기*/}
+                    {/*정답 여부는 radio button으로*/}
+                    <TextField label="보기1" type="text" name="choice1" placeholder="보기1"
+                               fullWidth margin="normal" style={classes.textField} value={this.state.items[0].choice} onChange={this.handleChangeItemList} />
+                    <TextField label="보기2" type="text" name="choice2" placeholder="보기2"
+                               fullWidth margin="normal" style={classes.textField} value={this.state.items[1].choice} onChange={this.handleChangeItemList} />
+                    <TextField label="보기3" type="text" name="choice3" placeholder="보기3"
+                               fullWidth margin="normal" style={classes.textField} value={this.state.items[2].choice} onChange={this.handleChangeItemList} />
+                    <TextField label="보기4" type="text" name="choice4" placeholder="보기4"
+                               fullWidth margin="normal" style={classes.textField} value={this.state.items[3].choice} onChange={this.handleChangeItemList} />
+                </FormGroup>
                 <FormGroup>
                     <TextField label="정답 여부" type="text" name="isCorrect" placeholder="true or false"
                                fullWidth margin="normal" style={classes.textField} value={this.state.isCorrect} onChange={this.handleChange} />
