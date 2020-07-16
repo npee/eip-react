@@ -11,6 +11,7 @@ import FormControl from "@material-ui/core/FormControl";
 import { withStyles } from '@material-ui/core/styles';
 import Container from "@material-ui/core/Container";
 import FormGroup from "@material-ui/core/FormGroup";
+import Radio from "@material-ui/core/Radio";
 
 const useStyles = () => ({
     typoGraphy: {
@@ -23,7 +24,10 @@ const useStyles = () => ({
     },
     textField: {
         margin: 6,
-    }
+    },
+    itemField: {
+        minWidth: 500
+    },
 });
 
 class EditQuizComponent extends Component {
@@ -38,7 +42,7 @@ class EditQuizComponent extends Component {
             subjectId: '',
             question: '',
             image: '',
-            isCorrect: ''
+            items: []
         };
     }
 
@@ -58,7 +62,7 @@ class EditQuizComponent extends Component {
                 subjectId: quiz.subjectId,
                 question: quiz.question,
                 image: quiz.image,
-                isCorrect: quiz.isCorrect
+                items: quiz.items,
             });
         }).catch( err => {
             console.log('loadUser() Error!', err);
@@ -76,9 +80,27 @@ class EditQuizComponent extends Component {
     }
 
     handleChange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value
-        });
+        this.setState({[e.target.name]: e.target.value});
+    }
+
+    handleChangeItemList = (e) => {
+        const items = [...this.state.items];
+        const itemIndex = parseInt(e.target.name.slice(6)) - 1;
+        let item = items;
+        if (e.target.name.includes('choice')) {
+            item[itemIndex].choice = e.target.value;
+        } else {
+            for (let i in item) {
+                item[i].isAnswer = 'false';
+            }
+            item[itemIndex].isAnswer = 'true';
+        }
+        for (let i in items) {
+            items[i] = item[i];
+        }
+        this.setState({items: items});
+
+        console.log(this.state);
     }
 
     home = (e) => {
@@ -95,7 +117,7 @@ class EditQuizComponent extends Component {
             subjectId: this.state.subjectId,
             question: this.state.question,
             image: this.state.image,
-            isCorrect: this.state.isCorrect
+            items: this.state.items,
         }
 
         ApiService.editQuiz(quiz).then( res => {
@@ -110,23 +132,55 @@ class EditQuizComponent extends Component {
         });
     }
 
-    setItems = (items) => {
-        return items.map( (item, index) =>
-            <MenuItem key={index} value={item}>{item}</MenuItem>
+    setOption = (options) => {
+        return options.map( (option, index) =>
+            <MenuItem key={index} value={option}>{option}</MenuItem>
         )
     }
 
-    setItemsForSubject = (items) => {
+    setSubject = (subjects) => {
+        return subjects.map( (subject, index) =>
+            <MenuItem key={index} value={index+1}>{subject}</MenuItem>
+        )
+    }
+
+    /**
+     * 보기 리스트 Input
+     * @param items : any[]
+     * @returns {*}
+     */
+    setItem = (items) => {
+        const classes = useStyles();
+        const labels = ["보기1", "보기2", "보기3", "보기4"];
+        const choices = ["choice1", "choice2", "choice3", "choice4"];
+        const answers = ["answer1", "answer2", "answer3", "answer4"];
         return items.map( (item, index) =>
-            <MenuItem key={index} value={index+1}>{item}</MenuItem>
+            <FormGroup row key={index}>
+                <Radio
+                    checked={items[index].isAnswer === 'true'}
+                    onChange={this.handleChangeItemList}
+                    value={items[index].isAnswer}
+                    name={answers[index]}
+                    inputProps={{ 'aria-label': labels[index] }}
+                />
+                <TextField
+                    label={labels[index]}
+                    type="text"
+                    name={choices[index]}
+                    placeholder={labels[index]}
+                    variant="outlined"
+                    margin="normal"
+                    style={classes.itemField}
+                    value={items[index].choice}
+                    onChange={this.handleChangeItemList}
+                />
+            </FormGroup>
         )
     }
 
     // TODO: image는 파일 업로드로 대체 해야함
-    // TODO: isCorrect는 radio button으로 대체 예정
-    // TODO: 선택지(보기) 넣어야 함
-    render() {
 
+    render() {
         const nths = ['1st', '2nd', '3rd', '1st+2nd'];
         const years = () => {
             let yearList = [];
@@ -158,15 +212,15 @@ class EditQuizComponent extends Component {
                 <FormGroup row>
                     <FormControl style={classes.select}>
                         <InputLabel id="year-list">연도</InputLabel>
-                        <Select labelId="year-lists" name="year" value={this.state.year} onChange={this.handleChange}>{this.setItems(years())}</Select>
+                        <Select labelId="year-lists" name="year" value={this.state.year} onChange={this.handleChange}>{this.setOption(years())}</Select>
                     </FormControl>
                     <FormControl style={classes.select}>
                         <InputLabel id="nth-list">회차</InputLabel>
-                        <Select labelId="nth-list" name="nth" value={this.state.nth} onChange={this.handleChange}>{this.setItems(nths)}</Select>
+                        <Select labelId="nth-list" name="nth" value={this.state.nth} onChange={this.handleChange}>{this.setOption(nths)}</Select>
                     </FormControl>
                     <FormControl style={classes.select}>
                         <InputLabel id="subject-list">과목명</InputLabel>
-                        <Select labelId="subject-list" name="subjectId" value={this.state.subjectId} onChange={this.handleChange}>{this.setItemsForSubject(subjects())}</Select>
+                        <Select labelId="subject-list" name="subjectId" value={this.state.subjectId} onChange={this.handleChange}>{this.setSubject(subjects())}</Select>
                     </FormControl>
                 </FormGroup>
                 <FormGroup>
@@ -175,12 +229,7 @@ class EditQuizComponent extends Component {
                     <TextField label="이미지" type="text" name="image" placeholder="이미지가 있으면 등록해주세요"
                                fullWidth margin="normal" style={classes.textField} value={this.state.image} onChange={this.handleChange} />
                 </FormGroup>
-                <FormGroup>
-                    {/*보기*/}
-                    {/*정답 여부는 radio button으로*/}
-                    <TextField label="정답 여부" type="text" name="isCorrect" placeholder="true or false"
-                               fullWidth margin="normal" style={classes.textField} value={this.state.isCorrect} onChange={this.handleChange} />
-                </FormGroup>
+                <FormGroup>{this.setItem(this.state.items)}</FormGroup>
                 <Button variant="contained" color="primary" onClick={this.saveQuiz}>수정</Button>
             </Container>
         );

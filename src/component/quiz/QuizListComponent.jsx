@@ -116,7 +116,6 @@ class QuizListComponent extends Component {
                             <TableCell align="center">subject</TableCell>
                             <TableCell align="inherit">Question</TableCell>
                             <TableCell align="inherit">ImageUrl</TableCell>
-                            <TableCell align="center">isCorrect</TableCell>
                             <TableCell align="center">CreatedAt</TableCell>
                             <TableCell align="center">ModifiedAt</TableCell>
                         </TableRow>
@@ -130,7 +129,6 @@ class QuizListComponent extends Component {
                                 <TableCell align="center">{this.findSubjectByIdAndYear(quiz.subjectId, quiz.year)}</TableCell>
                                 <TableCell align="inherit">{quiz.question}</TableCell>
                                 <TableCell align="inherit">{quiz.image}</TableCell>
-                                <TableCell align="center">{quiz.isCorrect}</TableCell>
                                 <TableCell align="center">{quiz.createdDate}</TableCell>
                                 <TableCell align="center">{quiz.modifiedDate}</TableCell>
                                 <TableCell align="center" onClick={() => this.deleteQuiz(quiz.quizId)}>

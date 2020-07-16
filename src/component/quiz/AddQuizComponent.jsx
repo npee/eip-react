@@ -14,7 +14,7 @@ import FormGroup from "@material-ui/core/FormGroup";
 import Radio from "@material-ui/core/Radio";
 
 // eslint-disable-next-line no-unused-vars
-class Quiz { quizId; year; nth; subjectId; question; image; isCorrect; createdDate; modifiedDate; }
+class Quiz { quizId; year; nth; subjectId; question; image; createdDate; modifiedDate; }
 class Subject { subjectId; subject; subject2019; }
 console.log(Quiz);
 console.log(Subject);
@@ -34,9 +34,6 @@ const useStyles = () => ({
     itemField: {
         minWidth: 500
     },
-    selectedItem: {
-
-    }
 });
 
 class AddQuizComponent extends Component {
@@ -53,7 +50,6 @@ class AddQuizComponent extends Component {
             subjectId: '',
             question: '',
             image: '',
-            isCorrect: 'false',
             items: [
                 {
                     choice: '',
@@ -126,7 +122,6 @@ class AddQuizComponent extends Component {
             subjectId: this.state.subjectId,
             question: this.state.question,
             image: this.state.image,
-            isCorrect: this.state.isCorrect,
             items: this.state.items,
         }
 
@@ -239,10 +234,6 @@ class AddQuizComponent extends Component {
                                fullWidth margin="normal" style={classes.textField} value={this.state.image} onChange={this.handleChange} />
                 </FormGroup>
                 <FormGroup>{this.setItem(this.state.items)}</FormGroup>
-                <FormGroup>
-                    <TextField label="정답 여부" type="text" name="isCorrect" placeholder="true or false"
-                               fullWidth margin="normal" style={classes.textField} value={this.state.isCorrect} onChange={this.handleChange} />
-                </FormGroup>
                 <Button variant="contained" color="primary" onClick={this.saveQuiz}>저장</Button>
             </Container>
         );
