@@ -28,6 +28,10 @@ class ApiService {
         return axios.get(API_BASE_URL + '/subjects');
     }
 
+    fetchQuizCountList() {
+        return axios.get(API_BASE_URL + '/quizzes/count');
+    }
+
 }
 
 export default new ApiService();

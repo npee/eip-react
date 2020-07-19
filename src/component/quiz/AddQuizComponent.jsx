@@ -73,6 +73,7 @@ class AddQuizComponent extends Component {
 
     componentDidMount() {
         this.reloadSubjectList();
+        this.reloadQuizCountList();
     }
 
     reloadSubjectList = () => {
@@ -82,6 +83,16 @@ class AddQuizComponent extends Component {
             });
         }).catch( err => {
             console.log('reloadSubjectList() Error!', err);
+        });
+    }
+
+    reloadQuizCountList = () => {
+        ApiService.fetchQuizCountList().then( res => {
+            this.setState({
+                quizCountList: res.data.list,
+            });
+        }).catch( err => {
+            console.log('reloadQuizCountList() Error!', err);
         });
     }
 
