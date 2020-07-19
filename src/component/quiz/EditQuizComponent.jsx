@@ -181,7 +181,7 @@ class EditQuizComponent extends Component {
     // TODO: image는 파일 업로드로 대체 해야함
 
     render() {
-        const nths = ['1st', '2nd', '3rd', '1st+2nd'];
+        const nths = ['1st', '2nd', '3rd'];
         const years = () => {
             let yearList = [];
             for (let y = 2020; y > 2000; y--) {
