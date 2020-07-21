@@ -117,7 +117,7 @@ class QuizListComponent extends Component {
 
         return (
             <div>
-                <Typography variant="h4" style={ classes.typoGraphy }>List</Typography>
+                <Typography variant="h4" style={ classes.typoGraphy }>Quiz List</Typography>
                 <Button variant="contained" color="primary" onClick={this.addQuiz}>퀴즈 등록</Button>
                 <Table>
                     <TableHead>
