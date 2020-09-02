@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import ApiService from "../../../ApiService";
 
 import Table from '@material-ui/core/Table';
@@ -12,7 +11,6 @@ import Typography from "@material-ui/core/Typography";
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { withStyles } from '@material-ui/core/styles';
-import CommonLayoutComponent from "./CommonLayoutComponent";
 
 const useStyles = () => ({
     typoGraphy: {
@@ -21,24 +19,14 @@ const useStyles = () => ({
     }
 });
 
-class HomeComponent extends Component {
-
+class CommonLayoutComponent extends Component {
     render() {
-
-        const classes = useStyles();
-
         return (
             <>
-                {/*<pre>{this.props.match.path}</pre>*/}
-                <Route exact path={this.props.match.path} component={CommonLayoutComponent}/>
-                <ul>
-                    <li>1</li>
-                    <li>2</li>
-                </ul>
-                <Typography style={classes.typoGraphy}>home component(container)</Typography>
+                <pre>Common Layout Component(nested router test)</pre>
             </>
         );
     }
 }
 
-export default withStyles(useStyles)(HomeComponent);
+export default withStyles(useStyles)(CommonLayoutComponent);
