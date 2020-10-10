@@ -4,8 +4,8 @@ const API_BASE_URL = "http://127.0.0.1:8080/v1";
 
 class ApiService {
 
-    fetchQuizzes() {
-        return axios.get(API_BASE_URL + '/quizzes');
+    fetchQuizzes(page, size, sort) {
+        return axios.get(API_BASE_URL + '/quizzes/page?page=' + page + "&size=" + size + '&sort=' + sort);
     }
 
     fetchQuizById(quizId) {

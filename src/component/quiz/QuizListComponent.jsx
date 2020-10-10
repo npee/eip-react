@@ -11,6 +11,7 @@ import Typography from "@material-ui/core/Typography";
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { withStyles } from '@material-ui/core/styles';
+import Pagination from '@material-ui/lab/Pagination';
 
 // eslint-disable-next-line no-unused-vars
 // class Quiz { quizId; year; nth; subjectId; question; image; isCorrect; createdDate; modifiedDate; }
@@ -18,6 +19,10 @@ import { withStyles } from '@material-ui/core/styles';
 
 const useStyles = () => ({
     typoGraphy: {
+        display: 'flex',
+        justifyContent: 'center'
+    },
+    pagination: {
         display: 'flex',
         justifyContent: 'center'
     }
@@ -31,6 +36,12 @@ class QuizListComponent extends Component {
         this.state = {
             quizzes:[],
             message: null,
+            totalPages: 0,
+            totalElements: 0,
+
+            page: 0,
+            size: 5,
+            sort: "",
         }
     }
 
@@ -41,13 +52,17 @@ class QuizListComponent extends Component {
     }
 
     reloadQuizList = () => {
-        ApiService.fetchQuizzes().then( res => {
+        const page = window.sessionStorage.getItem('currentPage') - 1;
+        ApiService.fetchQuizzes(page, this.state.size, this.state.sort).then( res => {
             this.setState({
-                quizzes: res.data.list,
+                quizzes: res.data.pages.content,
+                totalPages: res.data.pages.totalPages,
+                totalElements: res.data.pages.totalElements,
             })
         }).catch( err => {
             console.log('reloadedQuizzesList() Error!', err);
         });
+        console.log(this.props);
     }
 
     reloadSubjectList = () => {
@@ -110,6 +125,13 @@ class QuizListComponent extends Component {
         }
     }
 
+    handlePageChange = (event, value) => {
+        window.sessionStorage.setItem('currentPage', value);
+        this.setState({
+           page: value - 1,
+        }, () => this.reloadQuizList());
+    }
+
     render() {
 
         const classes = useStyles();
@@ -153,6 +175,11 @@ class QuizListComponent extends Component {
                         )}
                     </TableBody>
                 </Table>
+                <Pagination
+                    style={ classes.pagination }
+                    count={this.state.totalPages}
+                    onChange={this.handlePageChange}
+                />
             </div>
         );
     }
